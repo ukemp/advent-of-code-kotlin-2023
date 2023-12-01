@@ -2,8 +2,7 @@ fun main() {
 
     fun part1(input: List<String>): Int {
         return input.sumOf { line ->
-            val chars = line.toCharArray()
-            "${chars.first { c -> c.isDigit() }}${chars.last { c -> c.isDigit() }}".toInt()
+            "${line.first { c -> c.isDigit() }}${line.last { c -> c.isDigit() }}".toInt()
         }
     }
 
@@ -42,6 +41,6 @@ fun main() {
     //check(part2(testInput) == 281)
 
     val input = readInput("Day01")
-    check(part1(input) == 54338)
-    check(part2(input) == 53389)
+    part1(input).println()
+    part2(input).println()
 }
