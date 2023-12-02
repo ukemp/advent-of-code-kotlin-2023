@@ -3,3 +3,4 @@
 build
 src/**/*.txt
 ownercode.md
+src/DayTemplate.kt
