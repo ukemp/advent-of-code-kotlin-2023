@@ -14,7 +14,7 @@ fun readGames(input: List<String>): List<Pair<Int, List<Map<String, Int>>>> {
     }
 }
 
-fun List<Map<String, Int>>.minValues(): Triple<Int, Int, Int> {
+fun List<Map<String, Int>>.maxValues(): Triple<Int, Int, Int> {
     var red = 0; var green = 0; var blue = 0
 
     forEach { draw ->
@@ -31,7 +31,7 @@ fun main() {
     fun part1(input: List<String>): Int {
         val games = readGames(input)
         return games.sumOf { game ->
-            val (red, green, blue) = game.second.minValues()
+            val (red, green, blue) = game.second.maxValues()
 
             if (red <= 12 && green <= 13 && blue <= 14) {
                 game.first
@@ -44,7 +44,7 @@ fun main() {
     fun part2(input: List<String>): Int {
         val games = readGames(input)
         return games.sumOf { game ->
-            val (red, green, blue) = game.second.minValues()
+            val (red, green, blue) = game.second.maxValues()
             red * green * blue
         }
     }
