@@ -1,8 +1,4 @@
-
-data class PartNumber(val y: Int, val x0: Int, val x1: Int, val value: Int) {
-}
-
-fun List<String>.charAt(x: Int, y: Int) = this[y][x]
+data class PartNumber(val y: Int, val x0: Int, val x1: Int, val value: Int)
 
 fun List<String>.neighboursOf(part: PartNumber): Sequence<Pair<Int, Int>> = sequence {
     // Go left first
@@ -43,7 +39,8 @@ fun parsePartNumbers(input: List<String>): List<PartNumber> {
     val result = mutableListOf<PartNumber>()
 
     input.forEachIndexed { y, line ->
-        var x0 = -1; var x1 = -1
+        var x0 = -1
+        var x1 = -1
         line.forEachIndexed { x, char ->
             if (char.isDigit()) {
                 if (x0 == -1) {
@@ -76,13 +73,8 @@ fun main() {
         val partNumbers = parsePartNumbers(input)
 
         return partNumbers.filter { partNumber ->
-            for (c in input.neighboursOf(partNumber)) {
-                if (input.charAt(c.first, c.second) != '.') {
-                    return@filter true
-                }
-            }
-            false
-        }.sumOf { partNumber -> partNumber.value}
+            input.neighboursOf(partNumber).firstOrNull { input[it.second][it.first] != '.' } != null
+        }.sumOf { partNumber -> partNumber.value }
     }
 
     fun part2(input: List<String>): Int {
@@ -93,12 +85,7 @@ fun main() {
                 if (char == '*') {
                     val star = x to y
                     val candidates = partNumbers.filter { partNumber ->
-                        for (c in input.neighboursOf(partNumber)) {
-                            if (c == star) {
-                                return@filter true
-                            }
-                        }
-                        false
+                        input.neighboursOf(partNumber).firstOrNull { it == star } != null
                     }
                     if (candidates.size == 2) {
                         sum += (candidates[0].value * candidates[1].value)
