@@ -18,7 +18,7 @@ fun List<String>.neighboursOf(part: PartNumber): Sequence<Pair<Int, Int>> = sequ
         }
     }
     // Go right
-    if (part.x1 < this@neighboursOf.size - 1) {
+    if (part.x1 < this@neighboursOf[part.y].length - 1) {
         yield(part.x1 + 1 to part.y)
     }
     // Take the upper row
