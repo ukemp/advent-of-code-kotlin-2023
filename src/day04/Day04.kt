@@ -1,3 +1,7 @@
+package day04
+
+import println
+import readInput
 
 data class Card(val id: Int, val winning: List<Int>, val own: List<Int>) {
 

@@ -1,3 +1,7 @@
+package day05
+
+import println
+import readInput
 import kotlin.math.min
 
 data class Mapping(val source: LongRange, val destination: LongRange) {

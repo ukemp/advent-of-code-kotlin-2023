@@ -1,3 +1,7 @@
+package day06
+
+import println
+import readInput
 
 data class Race(val time: Long, val distance: Long) {
 

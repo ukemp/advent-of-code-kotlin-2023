@@ -1,3 +1,8 @@
+package day03
+
+import println
+import readInput
+
 data class PartNumber(val y: Int, val x0: Int, val x1: Int, val value: Int)
 
 fun List<String>.neighboursOf(part: PartNumber): Sequence<Pair<Int, Int>> = sequence {

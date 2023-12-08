@@ -1,3 +1,7 @@
+package day02
+
+import println
+import readInput
 import kotlin.math.max
 
 fun readGames(input: List<String>): List<Pair<Int, List<Map<String, Int>>>> {
