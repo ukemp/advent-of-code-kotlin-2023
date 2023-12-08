@@ -12,7 +12,7 @@ fun parseMap(input: List<String>): Map<String, Pair<String, String>> {
     }
 }
 
-private fun gcd(a: Long, b: Long): Long {
+private fun greatestCommonDivisor(a: Long, b: Long): Long {
     var a = a
     var b = b
     while (b > 0) {
@@ -23,13 +23,13 @@ private fun gcd(a: Long, b: Long): Long {
     return a
 }
 
-private fun lcm(a: Long, b: Long): Long {
-    return a * (b / gcd(a, b))
+private fun leastCommonMultiple(a: Long, b: Long): Long {
+    return a * (b / greatestCommonDivisor(a, b))
 }
 
-private fun lcm(input: List<Long>): Long {
+private fun leastCommonMultiple(input: List<Long>): Long {
     var result = input[0]
-    for (i in 1 until input.size) result = lcm(result, input[i])
+    for (i in 1 until input.size) result = leastCommonMultiple(result, input[i])
     return result
 }
 
@@ -69,7 +69,7 @@ fun main() {
             countSteps(input[0], map, source) { it.endsWith("Z") }
         }
 
-        return lcm(counts)
+        return leastCommonMultiple(counts)
     }
 
     // test if implementation meets criteria from the description, like:
