@@ -3,18 +3,29 @@ package day08
 import println
 import readInput
 
-fun parseMap(input: List<String>): Map<String, Pair<String, String>> {
+fun parseMap(input: List<String>): Map<String, Instruction> {
     val regex = Regex("""([A-Z]{3}), ([A-Z]{3})""")
     return input.filter { it.contains("=") }.associate { line ->
         val (key, pairs) = line.split(" = ")
         val group = regex.find(pairs)!!.groupValues
-        key to (group[1] to group[2])
+        key to Instruction(group[1], group[2])
     }
 }
 
-private fun greatestCommonDivisor(a: Long, b: Long): Long {
-    var a = a
-    var b = b
+data class Instruction(val left: String, val right: String) {
+
+    fun nodeFor(instr: Char): String {
+        return when (instr) {
+            'L' -> left
+            'R' -> right
+            else -> throw Error()
+        }
+    }
+}
+
+private fun greatestCommonDivisor(a0: Long, b0: Long): Long {
+    var a = a0
+    var b = b0
     while (b > 0) {
         val temp = b
         b = a % b
@@ -37,20 +48,17 @@ fun main() {
 
     fun countSteps(
         instructions: String,
-        map: Map<String, Pair<String, String>>,
+        map: Map<String, Instruction>,
         start: String,
         isTerminated: (String) -> Boolean
     ): Long {
         var count = 0L
-        var src = start
+        var node = start
         outer@ while (true) {
             for (instruction in instructions) {
-                when (instruction) {
-                    'L' -> src = map[src]!!.first
-                    'R' -> src = map[src]!!.second
-                }
+                node = map[node]?.nodeFor(instruction) ?: throw Error("Missing '$node'")
                 count++
-                if (isTerminated(src)) {
+                if (isTerminated(node)) {
                     break@outer
                 }
             }
@@ -64,9 +72,9 @@ fun main() {
 
     fun part2(input: List<String>): Long {
         val map = parseMap(input)
-        val sources = map.filter { entry -> entry.key.endsWith("A") }.map { entry -> entry.key }
-        val counts = sources.map { source ->
-            countSteps(input[0], map, source) { it.endsWith("Z") }
+        val startNodes = map.filter { entry -> entry.key.endsWith("A") }.map { entry -> entry.key }
+        val counts = startNodes.map { node ->
+            countSteps(input[0], map, node) { it.endsWith("Z") }
         }
 
         return leastCommonMultiple(counts)
