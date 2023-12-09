@@ -11,15 +11,8 @@ fun buildDifferences(line: String): List<List<Long>> {
         add(history)
 
         do {
-            val current = last()
-            val next = current.foldIndexed(mutableListOf<Long>()) { index, acc, l ->
-                if (index > 0) {
-                    acc.add(l - current[index - 1])
-                }
-                acc
-            }
+            val next = last().zipWithNext { a, b -> b - a }
             add(next)
-
         } while (!next.all { it == 0L })
     }
 }
