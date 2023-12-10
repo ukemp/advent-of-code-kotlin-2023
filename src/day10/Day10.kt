@@ -72,12 +72,51 @@ fun main() {
     }
 
     fun part2(input: List<String>): Long {
-        return input.size.toLong()
+        val (start, grid) = parseGrid(input)
+        var (left, right) = start.neighbours().filter { c -> grid[c]?.next()?.matches(start) ?: false }
+        var leftPrevious = start
+        var rightPrevious = start
+        val coordinates = mutableListOf(start)
+        while (true) {
+            val nextLeft = grid.next(leftPrevious, left)
+            val nextRight = grid.next(rightPrevious, right)
+            coordinates.add(nextLeft)
+            coordinates.add(nextRight)
+            if (nextLeft == nextRight) {
+                break
+            }
+            leftPrevious = left
+            rightPrevious = right
+            left = nextLeft
+            right = nextRight
+        }
+        val xmin = coordinates.minOf { c -> c.x }
+        val xmax = coordinates.maxOf { c -> c.x }
+        val ymin = coordinates.minOf { c -> c.y }
+        val ymax = coordinates.maxOf { c -> c.y }
+
+        var count = 0L
+        for (x in xmin..xmax) {
+            for (y in ymin..ymax) {
+                val candidate = Coordinate(x, y)
+                if (!coordinates.contains(candidate)) {
+                    val intersections = (candidate.x + 1..xmax).count { x0 ->
+                        val label = grid[Coordinate(x0, y)]?.label
+                        label != null && label != '-'
+                    }
+                    println(intersections)
+                    if (intersections % 2 != 0) {
+                        count++
+                    }
+                }
+            }
+        }
+        return count
     }
 
     // test if implementation meets criteria from the description, like:
-    val testInput = readInput("Day10_test")
-    check(part1(testInput) == 8L)
+    check(part1(readInput("Day10_test")) == 8L)
+    check(part2(readInput("Day10_test2")).also(::println) == 10L)
 
     val input = readInput("Day10")
     part1(input).println()
