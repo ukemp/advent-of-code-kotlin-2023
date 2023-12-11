@@ -9,25 +9,28 @@ fun computeResult(input: List<String>, expansion: Int): Long {
         line.forEachIndexed { x, c -> if (c == '#') acc.add(Coordinate(x, y)) }
         acc
     }
-    val emptyColumns = (0 until input[0].length).filter { x -> universe.firstOrNull { c -> c.x == x } == null }
+    val emptyColumns = (0 ..<input[0].length).filter { x -> universe.firstOrNull { c -> c.x == x } == null }
     val emptyRows = input.indices.filter { y -> universe.firstOrNull { c -> c.y == y } == null }
 
+    // Expand the universe
     emptyColumns.forEachIndexed { offset, x ->
-        for (index in universe.indices) {
-            if (universe[index].x > x + (offset * (expansion - 1))) {
-                universe[index] = universe[index].moveBy(dx = expansion - 1)
+        for (i in universe.indices) {
+            if (universe[i].x > x + (offset * expansion)) {
+                universe[i] = universe[i].moveBy(dx = expansion)
             }
         }
     }
     emptyRows.forEachIndexed { offset, y ->
-        for (index in universe.indices) {
-            if (universe[index].y > y + (offset * (expansion - 1))) {
-                universe[index] = universe[index].moveBy(dy = expansion - 1)
+        for (i in universe.indices) {
+            if (universe[i].y > y + (offset * expansion)) {
+                universe[i] = universe[i].moveBy(dy = expansion)
             }
         }
     }
+
+    // Compute all possible distances
     return universe.indices.sumOf { index ->
-        (index until universe.size).sumOf { j ->
+        (index ..<universe.size).sumOf { j ->
             universe[index].distanceTo(universe[j])
         }
     }
@@ -36,7 +39,7 @@ fun computeResult(input: List<String>, expansion: Int): Long {
 fun main() {
 
     fun part1(input: List<String>): Long {
-        return computeResult(input, 2)
+        return computeResult(input, 1)
     }
 
     fun part2(input: List<String>, expansion: Int): Long {
@@ -46,10 +49,10 @@ fun main() {
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day11_test")
     check(part1(testInput).also(::println) == 374L)
-    check(part2(testInput, 10).also(::println) == 1030L)
-    check(part2(testInput, 100).also(::println) == 8410L)
+    check(part2(testInput, 9).also(::println) == 1030L)
+    check(part2(testInput, 99).also(::println) == 8410L)
 
     val input = readInput("Day11")
     part1(input).println()
-    part2(input, 1_000_000).println()
+    part2(input, 999_999).println()
 }
