@@ -1,3 +1,5 @@
+import kotlin.math.absoluteValue
+
 @Suppress("NOTHING_TO_INLINE")
 inline fun Coordinate(x: Int, y: Int) = Coordinate(packInts(x, y))
 
@@ -37,6 +39,10 @@ value class Coordinate(private val packedValue: Long) {
     fun moveBy(dx: Int = 0, dy: Int = 0) = Coordinate(x + dx, y + dy)
 
     fun moveBy(coordinate: Coordinate) = moveBy(coordinate.x, coordinate.y)
+
+    fun distanceTo(other: Coordinate): Long {
+        return ((this.x - other.x).absoluteValue + (this.y - other.y).absoluteValue).toLong()
+    }
 
     fun neighbours(): List<Coordinate> {
         return listOf(
